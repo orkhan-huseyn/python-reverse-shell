@@ -4,6 +4,11 @@
 import socket  # for building TCP connection
 
 
+# host and port
+HOST = "127.0.0.1"
+PORT = 8080
+
+
 # transfer files
 def transfer(conn, command):
 
@@ -31,7 +36,7 @@ def transfer(conn, command):
 def connect():
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind(("127.0.0.1", 8080))
+    s.bind((HOST, PORT))
     s.listen(1)
 
     conn, addr = s.accept()

