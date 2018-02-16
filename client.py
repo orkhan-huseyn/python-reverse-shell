@@ -15,7 +15,7 @@ PORT = 8080
 def transfer(s, path):
 
     if os.path.exists(path):
-        f = open(path, "rb")
+        f = open(path, "r")
         packet = f.read(1024)
 
         while packet != "":
@@ -37,6 +37,7 @@ def connect():
     while True:
 
         command = s.recv(1024).decode()  # receive command
+        print(command)
 
         if "terminate" in command:
             s.close()  # close connection
